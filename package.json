@@ -10,6 +10,10 @@
     "preview": "vite preview"
   },
   "dependencies": {
+    "@sb1/ffe-buttons-react": "^24.0.24",
+    "@sb1/ffe-core-react": "^9.1.6",
+    "@sb1/ffe-icons-react": "^11.0.11",
+    "@sb1/ffe-webfonts": "^5.0.13",
     "react": "^18.3.1",
     "react-dom": "^18.3.1"
   },
@@ -22,6 +26,7 @@
     "eslint-plugin-react-hooks": "^5.0.0",
     "eslint-plugin-react-refresh": "^0.4.14",
     "globals": "^15.11.0",
+    "less": "^4.2.0",
     "typescript": "~5.6.2",
     "typescript-eslint": "^8.11.0",
     "vite": "^5.4.10"
