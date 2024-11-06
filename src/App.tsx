@@ -1,21 +1,21 @@
-import { Heading1 } from "@sb1/ffe-core-react";
+import { createBrowserRouter, RouterProvider } from "react-router-dom";
 import "./App.css";
-import {
-  ActionButton,
-  ButtonGroup,
-  PrimaryButton,
-} from "@sb1/ffe-buttons-react";
+import { Index } from "./pages";
+import { Side2 } from "./pages/side2";
+
+const router = createBrowserRouter([
+  {
+    path: "/",
+    element: <Index />,
+  },
+  {
+    path: "/side2",
+    element: <Side2 />,
+  },
+]);
 
 function App() {
-  return (
-    <>
-      <Heading1>OlgaBank1</Heading1>
-      <ButtonGroup ariaLabel={""}>
-        <ActionButton>Test</ActionButton>
-        <PrimaryButton>Test 2</PrimaryButton>
-      </ButtonGroup>
-    </>
-  );
+  return <RouterProvider router={router} />;
 }
 
 export default App;
