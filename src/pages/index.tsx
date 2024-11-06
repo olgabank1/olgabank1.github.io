@@ -13,7 +13,7 @@ export function Index() {
       <ButtonGroup ariaLabel={""}>
         <ActionButton>Test</ActionButton>
         <PrimaryButton>Test 2</PrimaryButton>
-        <ShortcutButton as="a" href="/side2">
+        <ShortcutButton as="a" href="#side2">
           Side 2
         </ShortcutButton>
       </ButtonGroup>

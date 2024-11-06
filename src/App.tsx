@@ -1,15 +1,15 @@
-import { createBrowserRouter, RouterProvider } from "react-router-dom";
+import { createHashRouter, RouterProvider } from "react-router-dom";
 import "./App.css";
 import { Index } from "./pages";
 import { Side2 } from "./pages/side2";
 
-const router = createBrowserRouter([
+const router = createHashRouter([
   {
     path: "/",
     element: <Index />,
   },
   {
-    path: "/side2",
+    path: "side2",
     element: <Side2 />,
   },
 ]);
