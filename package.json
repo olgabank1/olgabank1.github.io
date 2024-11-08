@@ -18,6 +18,7 @@
     "@sb1/ffe-core-react": "^9.1.6",
     "@sb1/ffe-datepicker-react": "^9.1.25",
     "@sb1/ffe-icons-react": "^11.0.11",
+    "@sb1/ffe-modals-react": "^1.1.2",
     "@sb1/ffe-searchable-dropdown-react": "^22.1.1",
     "@sb1/ffe-spinner": "^5.1.24",
     "@sb1/ffe-spinner-react": "^9.0.15",

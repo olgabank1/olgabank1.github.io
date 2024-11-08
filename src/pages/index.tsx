@@ -17,8 +17,9 @@ import { Spinner } from "@sb1/ffe-spinner-react";
 export function Index() {
   return (
     <>
-      <Heading1>OlgaBank1</Heading1>
-      <Wave color="fjell" />
+      <Wave color="syrin-30">
+        <Heading1>OlgaBank1</Heading1>
+      </Wave>
       <ButtonGroup ariaLabel={""}>
         <ActionButton>Test</ActionButton>
         <PrimaryButton>Test 2</PrimaryButton>
