@@ -25,6 +25,7 @@ function App() {
   const consent = localStorage.getItem("consent");
 
   useEffect(() => {
+    console.log("consent", consent);
     if (!consent) {
       modalRef.current?.open();
     }
@@ -32,7 +33,7 @@ function App() {
 
   return (
     <>
-      <RouterProvider router={router} />;
+      <RouterProvider router={router} />
       <Modal ref={modalRef} ariaLabelledby={headingId}>
         <ModalBlock>
           <Heading2 id={headingId}>Konsept side</Heading2>
