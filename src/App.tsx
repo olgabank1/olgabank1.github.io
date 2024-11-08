@@ -27,7 +27,7 @@ function App() {
   useEffect(() => {
     console.log("consent", consent);
     if (!consent) {
-      modalRef.current?.open();
+      setTimeout(() => modalRef.current?.open(), 200);
     }
   });
 
