@@ -9,13 +9,8 @@ import {
 } from "react-router-dom";
 import userRepository from "../../repository/user";
 import type { z } from "zod";
-import { InsertUserSchema, type SelectUser } from "../../db/schema";
-import { meQuery } from "../../queries/me";
-
-const login = async (queryClient: QueryClient, user: SelectUser) => {
-  sessionStorage.setItem("current-user", JSON.stringify(user));
-  await queryClient.invalidateQueries(meQuery);
-};
+import { InsertUserSchema } from "../../db/schema";
+import { login, meQuery } from "../../queries/me";
 
 const FieldErrors = ({ errors }: { errors?: string[] }) => {
   if (!errors?.length) return null;

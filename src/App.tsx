@@ -6,7 +6,7 @@ import { createHashRouter, RouterProvider } from "react-router-dom";
 import "./App.css";
 import { Index } from "./pages/(unauthenticated)";
 import { Side2 } from "./pages/(unauthenticated)/side2";
-import { queryClient } from "./query-client";
+import { queryClient } from "./queries/client";
 import { QueryClientProvider } from "@tanstack/react-query";
 import Login from "./pages/(unauthenticated)/login";
 import RequiresAuth from "./router/requires-auth";
@@ -42,7 +42,6 @@ const router = createHashRouter([
       {
         path: "nettbank-privat",
         element: <RequiresAuth />,
-        loader: RequiresAuth.loader(queryClient),
         children: [
           {
             index: true,
