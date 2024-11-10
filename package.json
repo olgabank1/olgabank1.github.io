@@ -23,6 +23,8 @@
     "@sb1/ffe-spinner": "^5.1.24",
     "@sb1/ffe-spinner-react": "^9.0.15",
     "@sb1/ffe-webfonts": "^5.0.13",
+    "@tanstack/react-query": "^5.59.20",
+    "@tanstack/react-query-devtools": "^5.59.20",
     "react": "^18.3.1",
     "react-dom": "^18.3.1",
     "react-router-dom": "^6.27.0"
