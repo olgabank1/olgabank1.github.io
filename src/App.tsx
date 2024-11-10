@@ -4,20 +4,31 @@ import { Modal, ModalBlock, ModalHandle } from "@sb1/ffe-modals-react";
 import { StrictMode, useEffect, useId, useRef } from "react";
 import { createHashRouter, RouterProvider } from "react-router-dom";
 import "./App.css";
+import { Index } from "./pages/(unauthenticated)";
+import { Side2 } from "./pages/(unauthenticated)/side2";
 import { queryClient } from "./query-client";
 import { QueryClientProvider } from "@tanstack/react-query";
 import { ReactQueryDevtools } from "@tanstack/react-query-devtools";
-import { Index } from "./pages";
-import { Side2 } from "./pages/side2";
+import Unauthenticated from "./router/unauthenticated";
 
 const router = createHashRouter([
   {
     path: "/",
-    element: <Index />,
-  },
-  {
-    path: "side2",
-    element: <Side2 />,
+    children: [
+      {
+        element: <Unauthenticated />,
+        children: [
+          {
+            index: true,
+            element: <Index />,
+          },
+          {
+            path: "side2",
+            element: <Side2 />,
+          },
+        ],
+      },
+    ],
   },
 ]);
 
