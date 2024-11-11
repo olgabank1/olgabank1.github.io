@@ -1,7 +1,7 @@
 import { ActionButton, ButtonGroup } from "@sb1/ffe-buttons-react";
 import { Heading2, Paragraph } from "@sb1/ffe-core-react";
 import { Modal, ModalBlock, ModalHandle } from "@sb1/ffe-modals-react";
-import { useEffect, useId, useRef, useState } from "react";
+import { useEffect, useId, useRef } from "react";
 import { createHashRouter, RouterProvider } from "react-router-dom";
 import "./App.css";
 import { Index } from "./pages";
@@ -17,15 +17,10 @@ const router = createHashRouter([
     element: <Side2 />,
   },
 ]);
-type Props = {
-  update: { forceUpdate: () => void };
-  resetState: () => void;
-};
-function App({ update, resetState }: Props) {
+
+function App() {
   const modalRef = useRef<ModalHandle>(null);
   const headingId = useId();
-  const [state, setState] = useState(1);
-  update.forceUpdate = () => setState(state + 1);
 
   const consent = localStorage.getItem("consent");
 
@@ -37,9 +32,8 @@ function App({ update, resetState }: Props) {
   });
 
   return (
-    <div key={state}>
+    <>
       <RouterProvider router={router} />
-      <ActionButton onClick={resetState}>Tilbakestill</ActionButton>
       <Modal ref={modalRef} ariaLabelledby={headingId}>
         <ModalBlock>
           <Heading2 id={headingId}>Konsept side</Heading2>
@@ -61,7 +55,7 @@ function App({ update, resetState }: Props) {
           </ButtonGroup>
         </ModalBlock>
       </Modal>
-    </div>
+    </>
   );
 }
 
