@@ -32,7 +32,7 @@ function App({ update, resetState }: Props) {
   useEffect(() => {
     console.log("consent", consent);
     if (!consent) {
-      setTimeout(() => modalRef.current?.open(), 200);
+      modalRef.current?.open();
     }
   });
 
