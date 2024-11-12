@@ -12,6 +12,7 @@ import { getByNnin } from "../../repository/user";
 import type { z } from "zod";
 import { InsertUserSchema } from "../../db/schema";
 import { login, meQuery } from "../../queries/me";
+import { createAndSeedFakeUser } from "../../db/seeder/fake";
 
 const FieldErrors = ({ errors }: { errors?: string[] }) => {
   if (!errors?.length) return null;
@@ -82,8 +83,8 @@ const action =
       await login(queryClient, user);
       return redirect("/nettbank-privat");
     }
-    return { formErrors: ["Fant ingen bruker med dette fødselsnummeret"] };
-
+    const newUser = await createAndSeedFakeUser(nnin);
+    await login(queryClient, newUser);
   };
 
 const loader =
