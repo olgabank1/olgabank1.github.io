@@ -87,7 +87,7 @@ const createFakeUser = async (
   const gender = parseInt(nnin.slice(1), 10) % 2 === 0 ? "female" : "male";
   const fakeName = `${faker.helpers.arrayElement(
     oldPeopleNames[gender]
-  )} ${faker.person.lastName(gender)}`;
+  )} ${faker.person.lastName()}`;
   return createUser({ nnin, name: fakeName }, { scope });
 };
 
