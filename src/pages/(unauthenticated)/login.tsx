@@ -4,6 +4,7 @@ import {
   Form,
   redirect,
   useActionData,
+  useNavigation,
   type ActionFunction,
   type LoaderFunction,
 } from "react-router-dom";
@@ -25,6 +26,8 @@ const FieldErrors = ({ errors }: { errors?: string[] }) => {
 
 const Page = () => {
   const actionData = useActionData() as FormattedErrors | null;
+  const { state } = useNavigation();
+  const isBusy = state !== "idle";
   return (
     <div className="place-content-center flex">
       <div className="w-full max-w-xs">
@@ -52,7 +55,9 @@ const Page = () => {
             </div>
           </div>
           <div className="flex items-center justify-between">
-            <PrimaryButton>Logg inn</PrimaryButton>
+            <PrimaryButton type="submit" disabled={isBusy}>
+              Logg inn
+            </PrimaryButton>
           </div>
           <FieldErrors errors={actionData?.formErrors} />
         </Form>
