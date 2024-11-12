@@ -7,10 +7,11 @@ import {
   type ActionFunction,
   type LoaderFunction,
 } from "react-router-dom";
-import userRepository from "../../repository/user";
+import { getByNnin } from "../../repository/user";
 import type { z } from "zod";
 import { InsertUserSchema } from "../../db/schema";
 import { login, meQuery } from "../../queries/me";
+import { createAndSeedFakeUser } from "../../db/seeder/fake";
 
 const FieldErrors = ({ errors }: { errors?: string[] }) => {
   if (!errors?.length) return null;
@@ -72,8 +73,14 @@ const action =
       return parseResult.error.flatten();
     }
     const { nnin } = parseResult.data;
-    const user = await userRepository.getByNnin(nnin);
-    await login(queryClient, user);
+    const user = await getByNnin(nnin);
+    if (user) {
+      await login(queryClient, user);
+      return redirect("/nettbank-privat");
+    }
+    const newUser = await createAndSeedFakeUser(nnin);
+    await login(queryClient, newUser);
+
     return redirect("/nettbank-privat");
   };
 

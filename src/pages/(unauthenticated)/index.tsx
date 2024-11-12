@@ -10,10 +10,10 @@ import { Heading1, Wave } from "@sb1/ffe-core-react";
 import { Datepicker } from "@sb1/ffe-datepicker-react";
 import { Icon } from "@sb1/ffe-icons-react";
 
-import house from "@sb1/ffe-icons/icons/filled/md/60fps.svg";
+import house from "@sb1/ffe-icons/icons/filled/md/60fps.svg?raw";
 import { SearchableDropdown } from "@sb1/ffe-searchable-dropdown-react";
 import { Spinner } from "@sb1/ffe-spinner-react";
-
+const base64house = `data:image/svg+xml;base64,${btoa(house)}`;
 export function Index() {
   return (
     <>
@@ -36,7 +36,7 @@ export function Index() {
           Enda mer innhold
         </AccordionItem>
       </Accordion>
-      <IconCard icon={<Icon size="xl" fileUrl={house} />}>
+      <IconCard icon={<Icon size="xl" fileUrl={base64house} />}>
         {({ CardAction, CardName, Title, Subtext, Text }) => (
           <>
             <CardName>Kortnavn</CardName>
