@@ -4,13 +4,15 @@ import {
   Form,
   redirect,
   useActionData,
+  useNavigation,
   type ActionFunction,
   type LoaderFunction,
 } from "react-router-dom";
-import userRepository from "../../repository/user";
+import { getByNnin } from "../../repository/user";
 import type { z } from "zod";
 import { InsertUserSchema } from "../../db/schema";
 import { login, meQuery } from "../../queries/me";
+import { createAndSeedFakeUser } from "../../db/seeder/fake";
 
 const FieldErrors = ({ errors }: { errors?: string[] }) => {
   if (!errors?.length) return null;
@@ -25,6 +27,8 @@ const FieldErrors = ({ errors }: { errors?: string[] }) => {
 
 const Page = () => {
   const actionData = useActionData() as FormattedErrors | null;
+  const { state } = useNavigation();
+  const isBusy = state !== "idle";
   return (
     <div className="place-content-center flex">
       <div className="w-full max-w-xs">
@@ -52,7 +56,9 @@ const Page = () => {
             </div>
           </div>
           <div className="flex items-center justify-between">
-            <PrimaryButton>Logg inn</PrimaryButton>
+            <PrimaryButton type="submit" disabled={isBusy}>
+              Logg inn
+            </PrimaryButton>
           </div>
           <FieldErrors errors={actionData?.formErrors} />
         </Form>
@@ -72,9 +78,13 @@ const action =
       return parseResult.error.flatten();
     }
     const { nnin } = parseResult.data;
-    const user = await userRepository.getByNnin(nnin);
-    await login(queryClient, user);
-    return redirect("/nettbank-privat");
+    const user = await getByNnin(nnin);
+    if (user) {
+      await login(queryClient, user);
+      return redirect("/nettbank-privat");
+    }
+    const newUser = await createAndSeedFakeUser(nnin);
+    await login(queryClient, newUser);
   };
 
 const loader =
