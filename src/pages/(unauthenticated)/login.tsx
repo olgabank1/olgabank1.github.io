@@ -85,6 +85,7 @@ const action =
     }
     const newUser = await createAndSeedFakeUser(nnin);
     await login(queryClient, newUser);
+    return redirect("/nettbank-privat");
   };
 
 const loader =
