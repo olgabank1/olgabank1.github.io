@@ -1,3 +1,4 @@
+import { ActionButton } from "@sb1/ffe-buttons-react";
 import { useSuspenseQuery } from "@tanstack/react-query";
 import { Outlet } from "react-router-dom";
 import { meQuery } from "../queries/me";
@@ -11,6 +12,16 @@ const Root = () => {
       <main>
         <Outlet context={me} />
       </main>
+      <footer>
+        <ActionButton
+          onClick={() => {
+            window.indexedDB.deleteDatabase("/pglite/olga-data");
+            window.location.reload();
+          }}
+        >
+          Reset
+        </ActionButton>
+      </footer>
     </>
   );
 };
