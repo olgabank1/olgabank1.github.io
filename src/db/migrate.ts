@@ -10,6 +10,6 @@ export async function migrate(db: Database) {
   await db.dialect.migrate(migrations, db.session, {
     migrationsTable: "drizzle_migrations",
   } satisfies Omit<MigrationConfig, "migrationsFolder">);
+  await createFunctionAndTrigger(db);
   await insertUsers(db)
-  return await createFunctionAndTrigger(db);
 }

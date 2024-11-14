@@ -42,6 +42,11 @@ export const getbyAccountIdAndApprovalStatus = async () => {
   return db.select().from(transactions).leftJoin(accounts, eq(accounts.id, transactions.accountId)).leftJoin(users, eq(accounts.ownerId, users.id)).where(isNull(transactions.approved_timestamp))
 }
 
+
+export const approveTransaction = async (transactionId: SelectTransaction["id"]) => {
+  return db.update(transactions).set({ approved_timestamp: new Date() }).where(eq(transactions.id, transactionId))
+}
+
 const getByUserId = async (
   {
     userId,

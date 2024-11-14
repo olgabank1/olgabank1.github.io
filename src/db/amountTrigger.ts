@@ -1,10 +1,10 @@
 import { PgliteDatabase } from "drizzle-orm/pglite";
 import * as schema from "./schema";
-import { createFakeAccounts, createFakeTransactions } from "./seeder/fake";
+import { createFakeTransactions } from "./seeder/fake";
 
 export const createFunctionAndTrigger = async (db: PgliteDatabase<typeof schema>) => {
     const paymentEnum = schema.transactionEnum.enumValues.find((v) => v === "Betaling");
-    const maxAmount = 10000;
+    const maxAmount = 3000;
     if(paymentEnum === undefined) {
       throw new Error("Could not find transaction type 'Betaling'");
     }
