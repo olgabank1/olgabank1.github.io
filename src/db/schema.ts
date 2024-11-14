@@ -94,3 +94,4 @@ export const paymentQueue = pgTable("payment_queue", {
 
 export type SelectPaymentQueue = InferSelectModel<typeof paymentQueue>;
 export type InsertPaymentQueue = InferInsertModel<typeof paymentQueue>;
+export const InsertPaymentQueueSchema = createInsertSchema(paymentQueue);

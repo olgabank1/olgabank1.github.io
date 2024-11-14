@@ -94,7 +94,7 @@ const DashBoard = () => {
                 <Title>
                   <CardAction
                     onClick={() => {
-                      navigate("./betale");
+                      navigate("./betaling");
                     }}
                   >
                     Betal

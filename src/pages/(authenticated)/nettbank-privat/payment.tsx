@@ -1,6 +1,7 @@
 import { useSuspenseQuery, type QueryClient } from "@tanstack/react-query";
 import {
   Form,
+  redirect,
   useActionData,
   useNavigate,
   useNavigation,
@@ -16,6 +17,7 @@ import { useState } from "react";
 import { formatAccountNumber, formatNumber } from "@sb1/ffe-formatters";
 import type { Account } from "@sb1/ffe-account-selector-react/types/types";
 import { PrimaryButton, SecondaryButton } from "@sb1/ffe-buttons-react";
+import { enqueuePayment } from "../../../repository/account";
 
 const PaymentPage = () => {
   const navigate = useNavigate();
@@ -38,7 +40,7 @@ const PaymentPage = () => {
   console.log(actionData);
   return (
     <div>
-      <Form method="post">
+      <Form method="post" className="flex flex-col gap-2">
         <InputGroup
           label="Betale fra konto:"
           extraMargin={false}
@@ -150,7 +152,7 @@ const PaymentPage = () => {
           disabled={isBusy}
           isLoading={isBusy}
         >
-          Godkjenn betaling
+          Gå videre
         </PrimaryButton>
       </Form>
       {(actionData?.formErrors.length ?? 0) > 0 && (
@@ -175,8 +177,7 @@ const PaymentSchema = z.object({
     .string({
       message: "Du må velge en til-konto",
     })
-    .regex(/^\d+$/, "Et kontonummer består kun av tall")
-    .transform(Number),
+    .regex(/^\d+$/, "Et kontonummer består kun av tall"),
   amount: z
     .string()
     .regex(new RegExp(amountPattern))
@@ -197,7 +198,19 @@ const action =
       return parseResult.error.flatten();
     }
 
-    return null;
+    const me = await queryClient.ensureQueryData(meQuery);
+    if (!me) {
+      return redirect("/innlogging");
+    }
+
+    const enqueuedPayment = await enqueuePayment({
+      fromAccountId: parseResult.data.fromAccountId,
+      toAccountNumber: parseResult.data.toAccountNumber,
+      amount: parseResult.data.amount.toString(),
+      message: parseResult.data.message,
+    });
+
+    return redirect(`/nettbank-privat/betaling/${enqueuedPayment.id}`);
   };
 
 PaymentPage.action = action;

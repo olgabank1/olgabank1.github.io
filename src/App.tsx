@@ -18,6 +18,7 @@ import Root from "./pages/root";
 import { queryClient } from "./queries/client";
 import RequiresAuth from "./router/requires-auth";
 import Unauthenticated from "./router/unauthenticated";
+import ApprovePaymentPage from "./pages/(authenticated)/nettbank-privat/approve-payment";
 
 const router = createHashRouter([
   {
@@ -57,9 +58,15 @@ const router = createHashRouter([
             action: TransferPage.action(queryClient),
           },
           {
-            path: "betale",
+            path: "betaling",
             element: <PaymentPage />,
             action: PaymentPage.action(queryClient),
+          },
+          {
+            path: "betaling/:id",
+            element: <ApprovePaymentPage />,
+            loader: ApprovePaymentPage.loader(queryClient),
+            action: ApprovePaymentPage.action(queryClient),
           },
           {
             path: "kontoer",

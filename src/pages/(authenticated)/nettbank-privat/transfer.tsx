@@ -14,7 +14,7 @@ import { accountBalanceKeys } from "../../../queries/account-balance";
 import { accountsQuery } from "../../../queries/accounts";
 import { meQuery } from "../../../queries/me";
 import { transfer } from "../../../repository/account";
-import { Input, Label } from "@sb1/ffe-form-react";
+import { Input } from "@sb1/ffe-form-react";
 import { ActionButton } from "@sb1/ffe-buttons-react";
 import { formatAccountNumber, formatNumber } from "@sb1/ffe-formatters";
 import amountPattern from "../../../utils/amountPattern";
@@ -42,7 +42,7 @@ const TransferPage = () => {
   const isBusy = state !== "idle";
   return (
     <div>
-      <Form method="post">
+      <Form method="post" className="flex flex-col gap-2">
         <InputGroup
           label="Velg fra-konto"
           extraMargin={false}
@@ -140,14 +140,15 @@ const TransferPage = () => {
         {selectedToAccountId && (
           <input type="hidden" name="toAccountId" value={selectedToAccountId} />
         )}
-        <Label htmlFor="amount">Beløp</Label>
-        <Input
-          id="amount"
-          name="amount"
-          type="string"
-          pattern={amountPattern}
-          required
-        />
+        <InputGroup label="Beløp" extraMargin={false}>
+          <Input
+            id="amount"
+            name="amount"
+            type="string"
+            pattern={amountPattern}
+            required
+          />
+        </InputGroup>
         {actionData?.fieldErrors.amount && (
           <ErrorFieldMessage>
             {actionData?.fieldErrors.amount?.map((error) => (
@@ -156,7 +157,6 @@ const TransferPage = () => {
           </ErrorFieldMessage>
         )}
         <ActionButton
-          className="mt-2"
           type="submit"
           disabled={isBusy}
           isLoading={isBusy}

@@ -3,7 +3,9 @@ import { db, type DatabaseQueryOptions } from "../db";
 import {
   accountBalance,
   accounts,
+  paymentQueue,
   type InsertAccount,
+  type InsertPaymentQueue,
   type SelectAccount,
   type SelectUser,
 } from "../db/schema";
@@ -104,4 +106,24 @@ const transfer = async ({
   });
 };
 
-export { createOne, createMany, getByUserId, getById, transfer };
+const enqueuePayment = async ({
+  fromAccountId,
+  toAccountNumber,
+  amount,
+  message,
+}: InsertPaymentQueue) => {
+  const [enqueuedPayment] = await db
+    .insert(paymentQueue)
+    .values({ fromAccountId, toAccountNumber, amount, message })
+    .returning();
+  return enqueuedPayment;
+};
+
+export {
+  createOne,
+  createMany,
+  getByUserId,
+  getById,
+  transfer,
+  enqueuePayment,
+};
