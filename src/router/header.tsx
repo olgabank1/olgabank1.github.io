@@ -1,4 +1,5 @@
 import {
+  ActionButton,
   PrimaryButton,
   SecondaryButton,
   ShortcutButton,
@@ -8,6 +9,7 @@ import { useQueryClient } from "@tanstack/react-query";
 import { useLocation, useNavigate } from "react-router-dom";
 import type { SelectUser } from "../db/schema";
 import { logout } from "../queries/me";
+import { deleteDatabase } from "../db";
 
 type Props = {
   loggedInUser: SelectUser | null;
@@ -28,6 +30,16 @@ export const Header = ({ loggedInUser: user }: Props) => {
         <ShortcutButton as="a" href="#login">
           Logg inn
         </ShortcutButton>
+        <ActionButton
+          onClick={async () => {
+            deleteDatabase();
+            await queryClient.invalidateQueries();
+            navigate("/");
+            window.location.reload();
+          }}
+        >
+          Reset
+        </ActionButton>
       </header>
     );
   }
@@ -55,6 +67,17 @@ export const Header = ({ loggedInUser: user }: Props) => {
         >
           Logg ut
         </SecondaryButton>
+
+        <ActionButton
+          onClick={async () => {
+            deleteDatabase();
+            await queryClient.invalidateQueries();
+            navigate("/");
+            window.location.reload();
+          }}
+        >
+          Reset
+        </ActionButton>
       </div>
     </header>
   );
