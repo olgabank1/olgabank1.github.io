@@ -7,6 +7,8 @@ import { Header } from "../router/header";
 
 import { Paragraph } from "@sb1/ffe-core-react";
 import house from "@sb1/ffe-icons/icons/filled/xl/home.svg?raw";
+import { Suspense } from "react";
+import { Spinner } from "@sb1/ffe-spinner-react";
 const base64house = `data:image/svg+xml;base64,${btoa(house)}`;
 
 const Root = () => {
@@ -17,7 +19,9 @@ const Root = () => {
     <>
       <Header loggedInUser={me} />
       <main>
-        <Outlet context={me} />
+        <Suspense fallback={<Spinner />}>
+          <Outlet context={me} />
+        </Suspense>
       </main>
       <ActionButton
         onClick={async () => {
