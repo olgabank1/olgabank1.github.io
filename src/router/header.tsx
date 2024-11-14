@@ -23,27 +23,29 @@ export const Header = ({ loggedInUser: user }: Props) => {
 
   if (!user) {
     return (
-      <header className="flex justify-between bg-fargeVann30">
+      <header className="flex justify-between bg-fargeSand30">
         <Heading2 className="mb-0  px-2 py-1 pt-8 text-fargeVann">
           SeniorBank 1
         </Heading2>
-        <ShortcutButton
-          onClick={() => {
-            navigate("/innlogging");
-          }}
-        >
-          Logg inn
-        </ShortcutButton>
-        <ActionButton
-          onClick={async () => {
-            deleteDatabase();
-            await queryClient.invalidateQueries();
-            navigate("/");
-            window.location.reload();
-          }}
-        >
-          Reset
-        </ActionButton>
+        <div>
+          <ShortcutButton
+            onClick={() => {
+              navigate("/innlogging");
+            }}
+          >
+            Logg inn
+          </ShortcutButton>
+          <ActionButton
+            onClick={async () => {
+              deleteDatabase();
+              await queryClient.invalidateQueries();
+              navigate("/");
+              window.location.reload();
+            }}
+          >
+            Reset
+          </ActionButton>
+        </div>
       </header>
     );
   }
