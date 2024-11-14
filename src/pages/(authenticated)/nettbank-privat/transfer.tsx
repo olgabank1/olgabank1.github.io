@@ -6,13 +6,13 @@ import {
   useNavigation,
   type ActionFunction,
 } from "react-router-dom";
-import { meQuery } from "../../queries/me";
-import { accountsQuery } from "../../queries/accounts";
+import { meQuery } from "../../../queries/me";
+import { accountsQuery } from "../../../queries/accounts";
 import { z } from "zod";
-import { transfer } from "../../repository/account";
+import { transfer } from "../../../repository/account";
 import { useState } from "react";
-import { accountBalanceKeys } from "../../queries/account-balance";
-import { FieldErrors } from "../../components/FieldErrors";
+import { accountBalanceKeys } from "../../../queries/account-balance";
+import { FieldErrors } from "../../../components/FieldErrors";
 
 const TransferPage = () => {
   const actionData = useActionData() as FormattedErrors | null;
@@ -86,7 +86,6 @@ const action =
     const formData = await request.formData();
     const parseResult = TransferSchema.safeParse(Object.fromEntries(formData));
     if (!parseResult.success) {
-      console.log(parseResult.error.flatten());
       return parseResult.error.flatten();
     }
     const me = await queryClient.ensureQueryData(meQuery);
@@ -96,9 +95,6 @@ const action =
     const {
       data: { fromAccountId, toAccountId, amount },
     } = parseResult;
-    console.log("Transfer from account", fromAccountId);
-    console.log("Transfer to account", toAccountId);
-    console.log("Transfer amount", amount);
     await transfer({
       userId: me.id,
       toAccountId: toAccountId,

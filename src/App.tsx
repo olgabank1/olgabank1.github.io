@@ -14,7 +14,7 @@ import Dashboard from "./pages/(authenticated)/nettbank-privat/dashboard";
 import { ReactQueryDevtools } from "@tanstack/react-query-devtools";
 import Unauthenticated from "./router/unauthenticated";
 import Root from "./pages/root";
-import TransferPage from "./pages/(authenticated)/transfer";
+import TransferPage from "./pages/(authenticated)/nettbank-privat/transfer";
 
 const router = createHashRouter([
   {
