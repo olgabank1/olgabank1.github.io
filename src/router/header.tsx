@@ -23,7 +23,7 @@ export const Header = ({ loggedInUser: user }: Props) => {
     return (
       <header className="flex justify-between bg-fargeVann">
         <h1>OlgaBank 1</h1>
-        <ShortcutButton as="a" href="#login">
+        <ShortcutButton as="a" href="#innlogging">
           Logg inn
         </ShortcutButton>
       </header>

@@ -15,6 +15,7 @@ import { ReactQueryDevtools } from "@tanstack/react-query-devtools";
 import Unauthenticated from "./router/unauthenticated";
 import Root from "./pages/root";
 import TransferPage from "./pages/(authenticated)/nettbank-privat/transfer";
+import PaymentPage from "./pages/(authenticated)/nettbank-privat/payment";
 
 const router = createHashRouter([
   {
@@ -29,7 +30,7 @@ const router = createHashRouter([
             element: <Index />,
           },
           {
-            path: "login",
+            path: "innlogging",
             element: <Login />,
             loader: Login.loader(queryClient),
             action: Login.action(queryClient),
@@ -49,9 +50,14 @@ const router = createHashRouter([
             element: <Dashboard />,
           },
           {
-            path: "transfer",
+            path: "overfore",
             element: <TransferPage />,
             action: TransferPage.action(queryClient),
+          },
+          {
+            path: "betale",
+            element: <PaymentPage />,
+            action: PaymentPage.action(queryClient),
           },
         ],
       },

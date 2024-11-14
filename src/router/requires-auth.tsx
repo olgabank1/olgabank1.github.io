@@ -5,7 +5,7 @@ import { meQuery } from "../queries/me";
 const RequiresAuth = () => {
   const { data: me } = useSuspenseQuery(meQuery);
   if (!me) {
-    return <Navigate to="/login" />;
+    return <Navigate to="/innlogging" />;
   }
   return <Outlet context={me} />;
 };

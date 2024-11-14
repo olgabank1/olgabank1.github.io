@@ -103,7 +103,7 @@ const action =
     }
     const me = await queryClient.ensureQueryData(meQuery);
     if (!me) {
-      return redirect("/login");
+      return redirect("/innlogging");
     }
     const {
       data: { fromAccountId, toAccountId, amount },
