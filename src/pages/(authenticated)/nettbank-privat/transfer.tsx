@@ -17,6 +17,7 @@ import { meQuery } from "../../../queries/me";
 import { transfer } from "../../../repository/account";
 import { Input, Label } from "@sb1/ffe-form-react";
 import { ActionButton } from "@sb1/ffe-buttons-react";
+import { formatAccountNumber } from "@sb1/ffe-formatters";
 
 const amountPattern = "^\\d+([.]\\d{2})?$";
 
@@ -24,53 +25,100 @@ const TransferPage = () => {
   const actionData = useActionData() as FormattedErrors | null;
   const { data: me } = useSuspenseQuery(meQuery);
   const { data: accounts } = useSuspenseQuery(accountsQuery(me!));
-  const [selectedFromAccountId, setSelectedFromAccount] = useState(
-    accounts?.at(0)!.id
+  const [selectedFromAccountId, setSelectedFromAccountId] = useState<
+    number | null
+  >(accounts?.at(0)!.id);
+  const [selectedToAccountId, setSelectedToAccountId] = useState<number | null>(
+    accounts?.at(1)!.id
   );
   const { state } = useNavigation();
   if (!accounts) {
     return <div>Du har ingen kontoer</div>;
   }
+  const selectedFromAccount = accounts.find(
+    (account) => account.id === selectedFromAccountId
+  );
+  const selectedToAccount = accounts.find(
+    (account) => account.id === selectedToAccountId
+  );
   const isBusy = state !== "idle";
-  const doSomething = () => {};
   return (
     <div>
       <Form method="post">
-        <Label htmlFor="fromAccountId">Fra konto</Label>
-        <select
-          id="fromAccountId"
-          name="fromAccountId"
-          value={selectedFromAccountId}
-          onChange={(e) => setSelectedFromAccount(parseInt(e.target.value, 10))}
-          required
+        <InputGroup
+          label="Velg fra-konto"
+          extraMargin={false}
+          fieldMessage={actionData?.fieldErrors.fromAccountId?.join("\n")}
         >
-          {accounts.map((account) => (
-            <option key={account.id} value={account.id}>
-              {account.name}
-            </option>
-          ))}
-        </select>
-        <Label htmlFor="toAccountId">Til konto</Label>
-        <select id="toAccountId" name="toAccountId" required>
-          {accounts
-            .filter(({ id }) => id != selectedFromAccountId)
-            .map((account) => (
-              <option key={account.id} value={account.id}>
-                {account.name}
-              </option>
-            ))}
-        </select>
-        <InputGroup label="Velg fra konto" extraMargin={false}>
           <AccountSelector
-            accounts={accounts.map(({ name, number }) => ({
-              accountNumber: number,
+            selectedAccount={
+              selectedFromAccount
+                ? {
+                    accountNumber: formatAccountNumber(
+                      selectedFromAccount.number
+                    ),
+                    name: selectedFromAccount.name,
+                    id: selectedFromAccountId,
+                  }
+                : undefined
+            }
+            accounts={accounts.map(({ name, number, id }) => ({
+              id: id,
+              accountNumber: formatAccountNumber(number),
               name: name,
             }))}
-            id={""}
-            onAccountSelected={doSomething}
-            onReset={doSomething}
+            id="fromAccountId"
+            onAccountSelected={(account) => {
+              setSelectedFromAccountId(account.id);
+            }}
+            onReset={() => {
+              setSelectedFromAccountId(null);
+            }}
           />
         </InputGroup>
+        {selectedFromAccountId && (
+          <input
+            type="hidden"
+            name="fromAccountId"
+            value={selectedFromAccountId}
+          />
+        )}
+        <InputGroup
+          label="Velg til-konto"
+          extraMargin={false}
+          fieldMessage={actionData?.fieldErrors.toAccountId?.join("\n")}
+        >
+          <AccountSelector
+            selectedAccount={
+              selectedToAccount
+                ? {
+                    accountNumber: formatAccountNumber(
+                      selectedToAccount.number
+                    ),
+                    name: selectedToAccount.name,
+                    id: selectedToAccountId,
+                  }
+                : undefined
+            }
+            accounts={accounts
+              .filter(({ id }) => id != selectedFromAccountId)
+              .map(({ name, number, id }) => ({
+                id: id,
+                accountNumber: formatAccountNumber(number),
+                name: name,
+              }))}
+            onAccountSelected={(account) => {
+              setSelectedToAccountId(account.id);
+            }}
+            id="toAccountId"
+            onReset={() => {
+              setSelectedToAccountId(null);
+            }}
+          />
+        </InputGroup>
+        {selectedToAccountId && (
+          <input type="hidden" name="toAccountId" value={selectedToAccountId} />
+        )}
         <Label htmlFor="amount">Beløp</Label>
         <Input
           id="amount"
@@ -95,8 +143,18 @@ const TransferPage = () => {
 };
 
 const TransferSchema = z.object({
-  fromAccountId: z.string().regex(/^\d+$/).transform(Number),
-  toAccountId: z.string().regex(/^\d+$/).transform(Number),
+  fromAccountId: z
+    .string({
+      message: "Du må velge en fra-konto",
+    })
+    .regex(/^\d+$/, "Et kontonummer består kun av tall")
+    .transform(Number),
+  toAccountId: z
+    .string({
+      message: "Du må velge en til-konto",
+    })
+    .regex(/^\d+$/, "Et kontonummer består kun av tall")
+    .transform(Number),
   amount: z.string().regex(new RegExp(amountPattern)).transform(Number),
 });
 type FormattedErrors = z.inferFlattenedErrors<typeof TransferSchema>;
