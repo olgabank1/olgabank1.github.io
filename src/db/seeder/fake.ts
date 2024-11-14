@@ -103,6 +103,7 @@ const createFakeAccounts = async (
     return {
       name: `${faker.food.adjective()} ${v}`,
       ownerId: user.id,
+      number: faker.finance.accountNumber(11),
       type: v,
     };
   });

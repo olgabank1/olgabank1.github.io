@@ -15,6 +15,13 @@
       "when": 1731396021947,
       "tag": "0001_pale_ben_grimm",
       "breakpoints": true
+    },
+    {
+      "idx": 2,
+      "version": "7",
+      "when": 1731582032519,
+      "tag": "0002_careless_trish_tilby",
+      "breakpoints": true
     }
   ]
 }

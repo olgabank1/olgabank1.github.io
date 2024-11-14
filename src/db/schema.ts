@@ -8,6 +8,7 @@ import {
   serial,
   text,
   timestamp,
+  varchar,
 } from "drizzle-orm/pg-core";
 import { createInsertSchema } from "drizzle-zod";
 import { string } from "zod";
@@ -38,6 +39,7 @@ export type AccountType = (typeof accountEnum.enumValues)[number];
 // Accounts table
 export const accounts = pgTable("accounts", {
   id: serial("id").primaryKey(),
+  number: varchar("account_number", { length: 11 }).unique().notNull(),
   name: text("name").notNull(),
   ownerId: integer("owner_id")
     .notNull()
