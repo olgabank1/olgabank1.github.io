@@ -7,9 +7,9 @@ import {
 import { Heading2 } from "@sb1/ffe-core-react";
 import { useQueryClient } from "@tanstack/react-query";
 import { Link, useLocation, useNavigate } from "react-router-dom";
+import { deleteDatabase } from "../db";
 import type { SelectUser } from "../db/schema";
 import { logout } from "../queries/me";
-import { deleteDatabase } from "../db";
 
 type Props = {
   loggedInUser: SelectUser | null;
@@ -23,8 +23,8 @@ export const Header = ({ loggedInUser: user }: Props) => {
 
   if (!user) {
     return (
-      <header className="flex justify-between bg-fargeVann">
-        <Heading2 className="mb-0 text-fargeHvit px-2 py-1 pt-8">
+      <header className="flex justify-between bg-fargeVann30">
+        <Heading2 className="mb-0  px-2 py-1 pt-8 text-fargeVann">
           SeniorBank 1
         </Heading2>
         <ShortcutButton
@@ -49,10 +49,10 @@ export const Header = ({ loggedInUser: user }: Props) => {
   }
 
   return (
-    <header className="flex justify-between bg-fargeVann">
+    <header className="flex justify-between bg-fargeVann30">
       <div>
         <Link to="/nettbank-privat">
-          <Heading2 className="mb-0 text-fargeHvit px-2 py-1 pt-8">
+          <Heading2 className="mb-0 text-fargeFjell px-2 py-1 pt-8">
             SeniorBank 1
           </Heading2>
         </Link>
