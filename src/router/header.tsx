@@ -3,11 +3,11 @@ import {
   SecondaryButton,
   ShortcutButton,
 } from "@sb1/ffe-buttons-react";
+import { Heading2 } from "@sb1/ffe-core-react";
 import { useQueryClient } from "@tanstack/react-query";
-import { logout } from "../queries/me";
 import { useLocation, useNavigate } from "react-router-dom";
 import type { SelectUser } from "../db/schema";
-import { Heading2 } from "@sb1/ffe-core-react";
+import { logout } from "../queries/me";
 
 type Props = {
   loggedInUser: SelectUser | null;
@@ -22,8 +22,10 @@ export const Header = ({ loggedInUser: user }: Props) => {
   if (!user) {
     return (
       <header className="flex justify-between bg-fargeVann">
-        <h1>OlgaBank 1</h1>
-        <ShortcutButton as="a" href="#innlogging">
+        <Heading2 className="mb-0 text-fargeHvit px-2 py-1 pt-8">
+          SeniorBank 1
+        </Heading2>
+        <ShortcutButton as="a" href="#login">
           Logg inn
         </ShortcutButton>
       </header>
@@ -33,9 +35,11 @@ export const Header = ({ loggedInUser: user }: Props) => {
   return (
     <header className="flex justify-between bg-fargeVann">
       <div>
-        <Heading2 className="mb-0 text-fargeHvit px-2 py-1">
-          OlgaBank 1
-        </Heading2>
+        <a href="#nettbank-privat">
+          <Heading2 className="mb-0 text-fargeHvit px-2 py-1 pt-8">
+            SeniorBank 1
+          </Heading2>
+        </a>
       </div>
       <div>
         {!isAuthenticatedPages && (
