@@ -204,6 +204,7 @@ const createFakeTransactions = async (
       type,
     };
   });
+  console.log(transactions);
   return createTransactions(transactions, { scope });
 };
 
@@ -223,4 +224,9 @@ const createAndSeedFakeUser = async (
   });
 };
 
-export { createAndSeedFakeUser, createFakeUser, createFakeAccounts, createFakeTransactions };
+export {
+  createAndSeedFakeUser,
+  createFakeUser,
+  createFakeAccounts,
+  createFakeTransactions,
+};

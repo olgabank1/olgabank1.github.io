@@ -13,10 +13,7 @@ import {
 import { createInsertSchema } from "drizzle-zod";
 import { string } from "zod";
 
-export const roleEnum = pgEnum("role_types", [
-  "Advisor",
-  "User",
-]);
+export const roleEnum = pgEnum("role_types", ["Advisor", "User"]);
 
 // Users table
 export const users = pgTable("users", {
@@ -37,7 +34,6 @@ export const InsertUserSchema = createInsertSchema(users, {
 export const accountEnum = pgEnum("account_types", [
   "Brukskonto",
   "Sparekonto",
-  "BSU",
   "Depositumskonto",
 ]);
 export type AccountType = (typeof accountEnum.enumValues)[number];
@@ -73,13 +69,13 @@ export const transactions = pgTable("account_transactions", {
     .notNull()
     .references(() => accounts.id),
   type: transactionEnum("type").notNull(),
-  approved_timestamp: timestamp("approved") 
+  approved_timestamp: timestamp("approved"),
 });
 
 export const triggers = pgTable("triggers", {
   id: serial("id").primaryKey(),
   name: text("name").notNull(),
-})
+});
 
 export type SelectTransaction = InferSelectModel<typeof transactions>;
 export type InsertTransaction = InferInsertModel<typeof transactions>;
