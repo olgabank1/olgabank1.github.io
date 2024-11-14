@@ -9,7 +9,7 @@ export const accountBalanceKeys = {
     [{ ...accountBalanceKeys.lists()[0], accountId }] as const,
 };
 
-const fetchAccountBalance = async ({
+export const fetchAccountBalance = async ({
   queryKey: [{ accountId }],
 }: QueryFunctionContext<ReturnType<(typeof accountBalanceKeys)["list"]>>) => {
   return getByAccountId(accountId);

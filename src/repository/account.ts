@@ -64,7 +64,7 @@ const transfer = async ({
       .where(and(eq(accounts.id, fromAccountId), eq(accounts.ownerId, userId)));
 
     if (sourceAccount == null || destinationAccount == null) {
-      throw new Error("One or both accounts not found for the user");
+      throw new Error("Kontoen finnes ikke");
     }
 
     const { balance: sourceBalance } = sourceAccount;
@@ -74,7 +74,7 @@ const transfer = async ({
     // Check if the source account has sufficient funds
     if (sourceBalanceNumber - amount < 0) {
       throw new Error(
-        `Insufficient funds in the source account: ${sourceBalance}\n Subtracted amount: ${amount}`
+        "Det er ikke nok penger på kontoen til å gjennomføre overføringen"
       );
     }
 
@@ -83,7 +83,7 @@ const transfer = async ({
       {
         accountId: fromAccountId,
         amount: (-amount).toString(),
-        description: `Transfer to account ${destinationAccount.name}`,
+        description: `Overføring til konto ${destinationAccount.name}`,
         timestamp: new Date(),
         type: "Overføring",
       },
@@ -95,7 +95,7 @@ const transfer = async ({
       {
         accountId: toAccountId,
         amount: amount.toString(),
-        description: `Transfer from account ${sourceAccount.name}`,
+        description: `Overføring fra konto ${sourceAccount.name}`,
         timestamp: new Date(),
         type: "Overføring",
       },

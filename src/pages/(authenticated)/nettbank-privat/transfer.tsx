@@ -1,5 +1,5 @@
 import { AccountSelector } from "@sb1/ffe-account-selector-react";
-import { InputGroup } from "@sb1/ffe-form-react";
+import { ErrorFieldMessage, InputGroup } from "@sb1/ffe-form-react";
 import { useSuspenseQuery, type QueryClient } from "@tanstack/react-query";
 import { useState } from "react";
 import {
@@ -10,16 +10,14 @@ import {
   type ActionFunction,
 } from "react-router-dom";
 import { z } from "zod";
-import { FieldErrors } from "../../../components/FieldErrors";
 import { accountBalanceKeys } from "../../../queries/account-balance";
 import { accountsQuery } from "../../../queries/accounts";
 import { meQuery } from "../../../queries/me";
 import { transfer } from "../../../repository/account";
 import { Input, Label } from "@sb1/ffe-form-react";
 import { ActionButton } from "@sb1/ffe-buttons-react";
-import { formatAccountNumber } from "@sb1/ffe-formatters";
-
-const amountPattern = "^\\d+([.]\\d{2})?$";
+import { formatAccountNumber, formatNumber } from "@sb1/ffe-formatters";
+import amountPattern from "../../../utils/amountPattern";
 
 const TransferPage = () => {
   const actionData = useActionData() as FormattedErrors | null;
@@ -51,6 +49,7 @@ const TransferPage = () => {
           fieldMessage={actionData?.fieldErrors.fromAccountId?.join("\n")}
         >
           <AccountSelector
+            showBalance={true}
             selectedAccount={
               selectedFromAccount
                 ? {
@@ -58,14 +57,24 @@ const TransferPage = () => {
                       selectedFromAccount.number
                     ),
                     name: selectedFromAccount.name,
-                    id: selectedFromAccountId,
+                    id: selectedFromAccount.id,
+                    balance:
+                      formatNumber(selectedFromAccount.balance, {
+                        locale: "nb",
+                        decimals: 2,
+                      }) ?? undefined,
                   }
                 : undefined
             }
-            accounts={accounts.map(({ name, number, id }) => ({
-              id: id,
+            accounts={accounts.map(({ name, number, id, balance }) => ({
+              id,
               accountNumber: formatAccountNumber(number),
-              name: name,
+              name,
+              balance:
+                formatNumber(balance, {
+                  locale: "nb",
+                  decimals: 2,
+                }) ?? undefined,
             }))}
             id="fromAccountId"
             onAccountSelected={(account) => {
@@ -89,6 +98,7 @@ const TransferPage = () => {
           fieldMessage={actionData?.fieldErrors.toAccountId?.join("\n")}
         >
           <AccountSelector
+            showBalance={true}
             selectedAccount={
               selectedToAccount
                 ? {
@@ -97,15 +107,26 @@ const TransferPage = () => {
                     ),
                     name: selectedToAccount.name,
                     id: selectedToAccountId,
+                    balance:
+                      formatNumber(selectedToAccount.balance, {
+                        locale: "nb",
+                        decimals: 2,
+                      }) ?? undefined,
                   }
                 : undefined
             }
             accounts={accounts
               .filter(({ id }) => id != selectedFromAccountId)
-              .map(({ name, number, id }) => ({
+              .map(({ name, number, id, balance }) => ({
                 id: id,
                 accountNumber: formatAccountNumber(number),
                 name: name,
+
+                balance:
+                  formatNumber(balance, {
+                    locale: "nb",
+                    decimals: 2,
+                  }) ?? undefined,
               }))}
             onAccountSelected={(account) => {
               setSelectedToAccountId(account.id);
@@ -127,7 +148,14 @@ const TransferPage = () => {
           pattern={amountPattern}
           required
         />
-        <FieldErrors errors={actionData?.fieldErrors.amount} />
+
+        {actionData?.fieldErrors.amount && (
+          <ErrorFieldMessage>
+            {actionData?.fieldErrors.amount?.map((error) => (
+              <p key={error}>{error}</p>
+            ))}
+          </ErrorFieldMessage>
+        )}
         <ActionButton
           type="submit"
           disabled={isBusy}
@@ -137,7 +165,13 @@ const TransferPage = () => {
           Overfør
         </ActionButton>
       </Form>
-      <FieldErrors errors={actionData?.formErrors} />
+      {(actionData?.formErrors.length ?? 0) > 0 && (
+        <ErrorFieldMessage>
+          {actionData?.formErrors.map((error) => (
+            <p key={error}>{error}</p>
+          ))}
+        </ErrorFieldMessage>
+      )}
     </div>
   );
 };
@@ -145,17 +179,27 @@ const TransferPage = () => {
 const TransferSchema = z.object({
   fromAccountId: z
     .string({
-      message: "Du må velge en fra-konto",
+      message: "Du må velge hvilken konto du vil overføre pengene fra",
     })
-    .regex(/^\d+$/, "Et kontonummer består kun av tall")
+    .regex(
+      /^\d+$/,
+      "Kontonummeret er ikke gyldig. Sjekk at du har skrevet det riktig."
+    )
     .transform(Number),
   toAccountId: z
     .string({
-      message: "Du må velge en til-konto",
+      message: "Du må velge hvilken konto du vil overføre pengene til",
     })
-    .regex(/^\d+$/, "Et kontonummer består kun av tall")
+    .regex(
+      /^\d+$/,
+      "Kontonummeret er ikke gyldig. Sjekk at du har skrevet det riktig."
+    )
     .transform(Number),
-  amount: z.string().regex(new RegExp(amountPattern)).transform(Number),
+  amount: z
+    .string()
+    .regex(new RegExp(amountPattern))
+    .transform(Number)
+    .pipe(z.number().gt(0, "Beløpet må være større enn 0 kr")),
 });
 type FormattedErrors = z.inferFlattenedErrors<typeof TransferSchema>;
 const action =
@@ -173,12 +217,19 @@ const action =
     const {
       data: { fromAccountId, toAccountId, amount },
     } = parseResult;
-    await transfer({
-      userId: me.id,
-      toAccountId: toAccountId,
-      fromAccountId: fromAccountId,
-      amount: amount,
-    });
+    try {
+      await transfer({
+        userId: me.id,
+        toAccountId: toAccountId,
+        fromAccountId: fromAccountId,
+        amount: amount,
+      });
+    } catch (e) {
+      return {
+        formErrors: [(e as unknown as Error).message],
+        fieldErrors: {},
+      } satisfies FormattedErrors;
+    }
     await queryClient.invalidateQueries({
       queryKey: accountBalanceKeys.list(fromAccountId),
     });

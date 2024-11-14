@@ -1,6 +1,7 @@
 import { queryOptions, type QueryFunctionContext } from "@tanstack/react-query";
 import { getByUserId } from "../repository/account";
 import { type SelectUser } from "../db/schema";
+import { accountBalanceKeys, fetchAccountBalance } from "./account-balance";
 
 export const accountKeys = {
   all: [{ scope: "accounts" }] as const,
@@ -12,7 +13,23 @@ export const accountKeys = {
 const fetchAccounts = async ({
   queryKey: [{ userId }],
 }: QueryFunctionContext<ReturnType<(typeof accountKeys)["list"]>>) => {
-  return getByUserId(userId);
+  const accounts = await getByUserId(userId);
+  const balances = await Promise.all(
+    accounts.map((account) =>
+      fetchAccountBalance({
+        queryKey: accountBalanceKeys.list(account.id),
+        signal: new AbortController().signal,
+        meta: undefined,
+      })
+    )
+  );
+  return accounts.map((account) => {
+    const balance = balances.find((b) => b.accountId === account.id);
+    return {
+      ...account,
+      balance: balance?.balance ?? "0",
+    };
+  });
 };
 
 export const accountsQuery = (user: SelectUser) =>
