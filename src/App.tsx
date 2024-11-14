@@ -66,7 +66,6 @@ const router = createHashRouter([
           {
             path: "betaling/:id",
             element: <ApprovePaymentPage />,
-            loader: ApprovePaymentPage.loader(queryClient),
             action: ApprovePaymentPage.action(queryClient),
           },
           {

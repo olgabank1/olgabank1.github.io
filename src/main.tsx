@@ -8,7 +8,7 @@ await doMigration().catch((error) => {
   console.error("Migration failed", error);
   console.log("Deleting database and reloading page");
   deleteDatabase();
-  location.reload();
+  //  location.reload();
 });
 
 createRoot(document.getElementById("root")!).render(

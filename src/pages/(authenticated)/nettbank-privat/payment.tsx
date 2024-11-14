@@ -37,7 +37,6 @@ const PaymentPage = () => {
   const { state } = useNavigation();
   const isBusy = state !== "idle";
 
-  console.log(actionData);
   return (
     <div>
       <Form method="post" className="flex flex-col gap-2">

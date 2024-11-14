@@ -11,5 +11,5 @@ export async function migrate(db: Database) {
     migrationsTable: "drizzle_migrations",
   } satisfies Omit<MigrationConfig, "migrationsFolder">);
   await createFunctionAndTrigger(db);
-  await insertUsers(db)
+  await insertUsers(db);
 }
