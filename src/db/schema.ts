@@ -13,11 +13,17 @@ import {
 import { createInsertSchema } from "drizzle-zod";
 import { string } from "zod";
 
+export const roleEnum = pgEnum("role_types", [
+  "Advisor",
+  "User",
+]);
+
 // Users table
 export const users = pgTable("users", {
   id: serial("id").primaryKey(),
   nnin: text("nnin").notNull(),
   name: text("name").notNull(),
+  role: roleEnum("role").default("User"),
 });
 export type SelectUser = InferSelectModel<typeof users>;
 export type InsertUser = InferInsertModel<typeof users>;

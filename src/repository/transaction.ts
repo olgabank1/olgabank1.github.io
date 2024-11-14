@@ -1,4 +1,4 @@
-import { asc, desc, eq } from "drizzle-orm";
+import {  asc, desc, eq, isNull } from "drizzle-orm";
 import { db, type DatabaseQueryOptions } from "../db";
 import {
   accountBalance,
@@ -37,6 +37,10 @@ const createMany = async (
 
 const getByAccountId = async (accountId: SelectAccount["id"]) =>
   db.select().from(transactions).where(eq(transactions.accountId, accountId));
+
+export const getbyAccountIdAndApprovalStatus = async () => {
+  return db.select().from(transactions).leftJoin(accounts, eq(accounts.id, transactions.accountId)).leftJoin(users, eq(accounts.ownerId, users.id)).where(isNull(transactions.approved_timestamp))
+}
 
 const getByUserId = async (
   {

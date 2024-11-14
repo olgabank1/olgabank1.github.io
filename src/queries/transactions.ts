@@ -1,6 +1,6 @@
 import { queryOptions, type QueryFunctionContext } from "@tanstack/react-query";
 import { type SelectAccount, type SelectUser } from "../db/schema";
-import { getByAccountId, getByUserId } from "../repository/transaction";
+import { getByAccountId, getbyAccountIdAndApprovalStatus, getByUserId } from "../repository/transaction";
 
 export const transactionKeys = {
   all: [{ scope: "transactions" }] as const,
@@ -35,3 +35,9 @@ export const transactionsByAccountQuery = (account: SelectAccount) =>
     queryKey: transactionKeys.byAccountId(account.id),
     queryFn: fetchAccountTransactions,
   });
+
+
+export const transactionsThatneedApprovalPlzQuery = (user: SelectUser) =>  queryOptions({
+  queryKey: transactionKeys.byUserId(user.id),
+  queryFn: getbyAccountIdAndApprovalStatus,
+});
