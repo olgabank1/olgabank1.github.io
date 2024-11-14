@@ -148,7 +148,6 @@ const TransferPage = () => {
           pattern={amountPattern}
           required
         />
-
         {actionData?.fieldErrors.amount && (
           <ErrorFieldMessage>
             {actionData?.fieldErrors.amount?.map((error) => (
