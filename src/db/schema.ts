@@ -80,3 +80,14 @@ export const accountBalance = pgMaterializedView("account_balance").as((qb) =>
     .from(transactions)
     .groupBy(transactions.accountId)
 );
+
+// When we make payments, we need to put the payment in a queue so that the user can approve it
+export const paymentQueue = pgTable("payment_queue", {
+  id: serial("id").primaryKey(),
+  fromAccountId: integer("from_account_id")
+    .notNull()
+    .references(() => accounts.id),
+  toAccountNumber: varchar("to_account_number", { length: 11 }).notNull(),
+  amount: numeric("amount").notNull(),
+  message: text("message").notNull(),
+});
