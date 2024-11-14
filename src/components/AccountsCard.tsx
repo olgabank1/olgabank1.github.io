@@ -22,7 +22,6 @@ const Account = ({ account }: AccountProps) => {
       <span>{accountBalance.balance}</span>
       <span>{account.type}</span>
       <span>
-        {" "}
         Det har vært {transactions?.length} transaksjoner på denne kontoen
       </span>
     </div>
