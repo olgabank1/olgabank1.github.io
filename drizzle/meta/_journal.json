@@ -5,22 +5,8 @@
     {
       "idx": 0,
       "version": "7",
-      "when": 1731270456530,
-      "tag": "0000_chilly_havok",
-      "breakpoints": true
-    },
-    {
-      "idx": 1,
-      "version": "7",
-      "when": 1731396021947,
-      "tag": "0001_pale_ben_grimm",
-      "breakpoints": true
-    },
-    {
-      "idx": 2,
-      "version": "7",
-      "when": 1731582032519,
-      "tag": "0002_careless_trish_tilby",
+      "when": 1731592154516,
+      "tag": "0000_oval_thing",
       "breakpoints": true
     }
   ]

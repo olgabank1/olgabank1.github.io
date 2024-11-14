@@ -69,6 +69,7 @@ const action =
     }
     const { nnin } = parseResult.data;
     const user = await getByNnin(nnin);
+    console.log(user)
     if (user) {
       await login(queryClient, user);
       return redirect("/nettbank-privat");

@@ -1,10 +1,13 @@
 CREATE TYPE "public"."account_types" AS ENUM('Brukskonto', 'Sparekonto', 'BSU', 'Depositumskonto');--> statement-breakpoint
+CREATE TYPE "public"."role_types" AS ENUM('Advisor', 'User');--> statement-breakpoint
 CREATE TYPE "public"."transaction_types" AS ENUM('Overføring', 'Betaling', 'Innskudd', 'Uttak');--> statement-breakpoint
 CREATE TABLE IF NOT EXISTS "accounts" (
 	"id" serial PRIMARY KEY NOT NULL,
+	"account_number" varchar(11) NOT NULL,
 	"name" text NOT NULL,
 	"owner_id" integer NOT NULL,
-	"type" "account_types" NOT NULL
+	"type" "account_types" NOT NULL,
+	CONSTRAINT "accounts_account_number_unique" UNIQUE("account_number")
 );
 --> statement-breakpoint
 CREATE TABLE IF NOT EXISTS "account_transactions" (
@@ -13,7 +16,20 @@ CREATE TABLE IF NOT EXISTS "account_transactions" (
 	"amount" numeric NOT NULL,
 	"timestamp" timestamp NOT NULL,
 	"account_id" integer NOT NULL,
-	"type" "transaction_types" NOT NULL
+	"type" "transaction_types" NOT NULL,
+	"approved" timestamp
+);
+--> statement-breakpoint
+CREATE TABLE IF NOT EXISTS "triggers" (
+	"id" serial PRIMARY KEY NOT NULL,
+	"name" text NOT NULL
+);
+--> statement-breakpoint
+CREATE TABLE IF NOT EXISTS "users" (
+	"id" serial PRIMARY KEY NOT NULL,
+	"nnin" text NOT NULL,
+	"name" text NOT NULL,
+	"role" "role_types" DEFAULT 'User'
 );
 --> statement-breakpoint
 DO $$ BEGIN

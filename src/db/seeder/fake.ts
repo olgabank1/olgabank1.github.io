@@ -223,4 +223,4 @@ const createAndSeedFakeUser = async (
   });
 };
 
-export { createAndSeedFakeUser };
+export { createAndSeedFakeUser, createFakeUser, createFakeAccounts, createFakeTransactions };
