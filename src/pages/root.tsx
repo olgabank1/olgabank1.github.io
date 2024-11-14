@@ -3,6 +3,7 @@ import { useQueryClient, useSuspenseQuery } from "@tanstack/react-query";
 import { useNavigate, Outlet } from "react-router-dom";
 import { meQuery } from "../queries/me";
 import { Header } from "../router/header";
+import { deleteDatabase } from "../db";
 
 const Root = () => {
   const { data: me } = useSuspenseQuery(meQuery);
@@ -16,12 +17,11 @@ const Root = () => {
       </main>
       <footer>
         <ActionButton
-          onClick={() => {
-            window.indexedDB.deleteDatabase("/pglite/olga-data");
-            window.sessionStorage.clear();
-            queryClient.invalidateQueries();
+          onClick={async () => {
+            deleteDatabase();
+            await queryClient.invalidateQueries();
             navigate("/");
-            window.location.reload();
+            location.reload();
           }}
         >
           Reset
