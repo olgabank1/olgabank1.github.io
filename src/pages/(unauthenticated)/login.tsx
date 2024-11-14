@@ -13,17 +13,7 @@ import type { z } from "zod";
 import { InsertUserSchema } from "../../db/schema";
 import { login, meQuery } from "../../queries/me";
 import { createAndSeedFakeUser } from "../../db/seeder/fake";
-
-const FieldErrors = ({ errors }: { errors?: string[] }) => {
-  if (!errors?.length) return null;
-  return (
-    <div className="flex flex-col gap-0.5 text-xs text-fargeBaer">
-      {errors.map((err) => (
-        <p key={err}>{err}</p>
-      ))}
-    </div>
-  );
-};
+import { FieldErrors } from "../../components/FieldErrors";
 
 const Page = () => {
   const actionData = useActionData() as FormattedErrors | null;
