@@ -1,21 +1,23 @@
 import { ActionButton, ButtonGroup } from "@sb1/ffe-buttons-react";
 import { Heading2, Paragraph } from "@sb1/ffe-core-react";
 import { Modal, ModalBlock, ModalHandle } from "@sb1/ffe-modals-react";
+import { QueryClientProvider } from "@tanstack/react-query";
+import { ReactQueryDevtools } from "@tanstack/react-query-devtools";
 import { StrictMode, useEffect, useId, useRef } from "react";
 import { createHashRouter, RouterProvider } from "react-router-dom";
 import "./App.css";
-import { Index } from "./pages/(unauthenticated)";
-import { Side2 } from "./pages/(unauthenticated)/side2";
-import { queryClient } from "./queries/client";
-import { QueryClientProvider } from "@tanstack/react-query";
-import Login from "./pages/(unauthenticated)/login";
-import RequiresAuth from "./router/requires-auth";
+import Accounts from "./pages/(authenticated)/nettbank-privat/accounts";
 import Dashboard from "./pages/(authenticated)/nettbank-privat/dashboard";
-import { ReactQueryDevtools } from "@tanstack/react-query-devtools";
-import Unauthenticated from "./router/unauthenticated";
-import Root from "./pages/root";
-import TransferPage from "./pages/(authenticated)/nettbank-privat/transfer";
 import PaymentPage from "./pages/(authenticated)/nettbank-privat/payment";
+import Transactions from "./pages/(authenticated)/nettbank-privat/transactions";
+import TransferPage from "./pages/(authenticated)/nettbank-privat/transfer";
+import { Index } from "./pages/(unauthenticated)";
+import Login from "./pages/(unauthenticated)/login";
+import { Side2 } from "./pages/(unauthenticated)/side2";
+import Root from "./pages/root";
+import { queryClient } from "./queries/client";
+import RequiresAuth from "./router/requires-auth";
+import Unauthenticated from "./router/unauthenticated";
 
 const router = createHashRouter([
   {
@@ -58,6 +60,16 @@ const router = createHashRouter([
             path: "betale",
             element: <PaymentPage />,
             action: PaymentPage.action(queryClient),
+          },
+          {
+            path: "kontoer",
+            element: <Accounts />,
+            action: TransferPage.action(queryClient),
+          },
+          {
+            path: "kontobevegelser",
+            element: <Transactions />,
+            action: TransferPage.action(queryClient),
           },
         ],
       },

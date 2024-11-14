@@ -1,9 +1,13 @@
 import { ActionButton } from "@sb1/ffe-buttons-react";
 import { useQueryClient, useSuspenseQuery } from "@tanstack/react-query";
-import { useNavigate, Outlet } from "react-router-dom";
+import { Outlet, useNavigate } from "react-router-dom";
+import { deleteDatabase } from "../db";
 import { meQuery } from "../queries/me";
 import { Header } from "../router/header";
-import { deleteDatabase } from "../db";
+
+import { Paragraph } from "@sb1/ffe-core-react";
+import house from "@sb1/ffe-icons/icons/filled/xl/home.svg?raw";
+const base64house = `data:image/svg+xml;base64,${btoa(house)}`;
 
 const Root = () => {
   const { data: me } = useSuspenseQuery(meQuery);
@@ -15,17 +19,21 @@ const Root = () => {
       <main>
         <Outlet context={me} />
       </main>
-      <footer>
-        <ActionButton
-          onClick={async () => {
-            deleteDatabase();
-            await queryClient.invalidateQueries();
-            navigate("/");
-            location.reload();
-          }}
-        >
-          Reset
-        </ActionButton>
+      <ActionButton
+        onClick={async () => {
+          deleteDatabase();
+          await queryClient.invalidateQueries();
+          navigate("/");
+          location.reload();
+        }}
+      >
+        Reset
+      </ActionButton>
+      <footer className="bg-fargeVann30 text-fargeHvit content-center flex align-middle justify-center pt-1 pb-1">
+        <a href="#nettbank-privat">
+          <img src={base64house} alt="Hjem" />
+          <Paragraph>Hjem</Paragraph>
+        </a>
       </footer>
     </>
   );
