@@ -2,6 +2,7 @@
 
 import AccountsCard from "../../../components/AccountsCard";
 import { LatestTransactionsCard } from "../../../components/LatestTransactionsCard";
+import { Link } from "react-router-dom";
 
 // The dashboard should show the a list of the user's accounts including their balance, a list of the user's latest transactions and a button to transfer money.
 const DashBoard = () => {
@@ -10,9 +11,12 @@ const DashBoard = () => {
       <h1 className="text-3xl">Din økonomi</h1>
       <AccountsCard />
       <LatestTransactionsCard />
-      <button className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded">
+      <Link
+        to={"./transfer"}
+        className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded"
+      >
         Overfør penger
-      </button>
+      </Link>
     </div>
   );
 };
