@@ -67,7 +67,14 @@ export const transactions = pgTable("account_transactions", {
     .notNull()
     .references(() => accounts.id),
   type: transactionEnum("type").notNull(),
+  approved_timestamp: timestamp("approved") 
 });
+
+export const triggers = pgTable("triggers", {
+  id: serial("id").primaryKey(),
+  name: text("name").notNull(),
+})
+
 export type SelectTransaction = InferSelectModel<typeof transactions>;
 export type InsertTransaction = InferInsertModel<typeof transactions>;
 
