@@ -15,6 +15,8 @@ import { accountBalanceKeys } from "../../../queries/account-balance";
 import { accountsQuery } from "../../../queries/accounts";
 import { meQuery } from "../../../queries/me";
 import { transfer } from "../../../repository/account";
+import { Input, Label } from "@sb1/ffe-form-react";
+import { ActionButton } from "@sb1/ffe-buttons-react";
 
 const amountPattern = "^\\d+([.]\\d{2})?$";
 
@@ -34,7 +36,7 @@ const TransferPage = () => {
   return (
     <div>
       <Form method="post">
-        <label htmlFor="fromAccountId">Fra konto:</label>
+        <Label htmlFor="fromAccountId">Fra konto</Label>
         <select
           id="fromAccountId"
           name="fromAccountId"
@@ -48,7 +50,7 @@ const TransferPage = () => {
             </option>
           ))}
         </select>
-        <label htmlFor="toAccountId">Til konto:</label>
+        <Label htmlFor="toAccountId">Til konto</Label>
         <select id="toAccountId" name="toAccountId" required>
           {accounts
             .filter(({ id }) => id != selectedFromAccountId)
@@ -69,8 +71,8 @@ const TransferPage = () => {
             onReset={doSomething}
           />
         </InputGroup>
-        <label htmlFor="amount">Beløp:</label>
-        <input
+        <Label htmlFor="amount">Beløp</Label>
+        <Input
           id="amount"
           name="amount"
           type="string"
@@ -78,9 +80,14 @@ const TransferPage = () => {
           required
         />
         <FieldErrors errors={actionData?.fieldErrors.amount} />
-        <button type="submit" disabled={isBusy}>
+        <ActionButton
+          type="submit"
+          disabled={isBusy}
+          isLoading={isBusy}
+          ariaLoadingMessage="Overfører penger..."
+        >
           Overfør
-        </button>
+        </ActionButton>
       </Form>
       <FieldErrors errors={actionData?.formErrors} />
     </div>
