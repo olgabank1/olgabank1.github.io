@@ -18,6 +18,7 @@ import Root from "./pages/root";
 import { queryClient } from "./queries/client";
 import RequiresAuth from "./router/requires-auth";
 import Unauthenticated from "./router/unauthenticated";
+import AdminPage from "./pages/(authenticated)/admin/admin";
 
 const router = createHashRouter([
   {
@@ -71,8 +72,15 @@ const router = createHashRouter([
             element: <Transactions />,
             action: TransferPage.action(queryClient),
           },
+          {
+            path: "admin",
+            element: <AdminPage />,
+            loader: AdminPage.loader(queryClient),
+          }
         ],
+        
       },
+      
     ],
   },
 ]);

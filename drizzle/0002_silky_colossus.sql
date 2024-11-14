@@ -1,1 +1,0 @@
-ALTER TABLE "account_transactions" ADD COLUMN "approved" timestamp;

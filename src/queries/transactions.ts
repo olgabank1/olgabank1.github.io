@@ -36,7 +36,6 @@ export const transactionsByAccountQuery = (account: SelectAccount) =>
     queryFn: fetchAccountTransactions,
   });
 
-
 export const transactionsThatneedApprovalPlzQuery = (user: SelectUser) =>  queryOptions({
   queryKey: transactionKeys.byUserId(user.id),
   queryFn: getbyAccountIdAndApprovalStatus,

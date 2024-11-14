@@ -1,5 +1,6 @@
 import { PgliteDatabase } from "drizzle-orm/pglite";
 import * as schema from "./schema";
+import { createFakeAccounts, createFakeTransactions } from "./seeder/fake";
 
 export const createFunctionAndTrigger = async (db: PgliteDatabase<typeof schema>) => {
     const paymentEnum = schema.transactionEnum.enumValues.find((v) => v === "Betaling");
@@ -34,22 +35,25 @@ export const insertUsers = async (db: PgliteDatabase<typeof schema>) => {
   const advisorRole = roles[0]
   const userRole = roles[1]
 
-  await db.insert(schema.users).values([
-    { nnin: "01010101010", name: "Ola Nordmann", role: userRole },
-    { nnin: "02020202020", name: "Kari Nordmann", role: userRole },
-    { nnin: "03030303030", name: "Knut Nordmann", role: userRole },
-    { nnin: "11111111111", name: "Admin Nordmann", role: advisorRole },
-    { nnin: "05050505050", name: "Knut Nordmann", role: userRole },
-  ]);
+  await db.transaction(async (trx) => {
 
-  const users = await db.select().from(schema.users);
-
-  users.forEach((user) => {
-    db.insert(schema.accounts).values([
-      { name: "Brukskonto", ownerId: user.id, type: "Brukskonto" },
-      { name: "Sparekonto", ownerId: user.id, type: "Sparekonto" },
-      { name: "BSU", ownerId: user.id, type: "BSU" },
-      { name: "Depositumskonto", ownerId: user.id, type: "Depositumskonto" },
+    await trx.insert(schema.users).values([
+      { nnin: "11111111111", name: "Admin Nordmann", role: advisorRole },
+      { nnin: "05050505050", name: "Knut Nordmann", role: userRole },
     ]);
+    const users = await trx.select().from(schema.users).limit(1);
+
+    users.forEach(async (user) => {
+      await trx.insert(schema.accounts).values([
+        { number: "12345678901", name: "Brukskonto", ownerId: user.id, type: "Brukskonto" },
+      ])
+    })
+
+    const accoount = await trx.select().from(schema.accounts).limit(1);
+
+    if(accoount.length > 0) {
+      await createFakeTransactions(accoount[0], { scope: trx });
+    }
   })
+
 }
