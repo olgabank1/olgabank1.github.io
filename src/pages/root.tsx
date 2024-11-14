@@ -1,5 +1,5 @@
 import { useSuspenseQuery } from "@tanstack/react-query";
-import { Outlet } from "react-router-dom";
+import { Link, Outlet } from "react-router-dom";
 import { meQuery } from "../queries/me";
 import { Header } from "../router/header";
 
@@ -20,10 +20,10 @@ const Root = () => {
         </Suspense>
       </main>
       <footer className="bg-fargeVann30 text-fargeHvit content-center flex align-middle justify-center pt-1 pb-1">
-        <a href="#nettbank-privat">
+        <Link to="/nettbank-privat">
           <img src={base64house} alt="Hjem" />
           <Paragraph>Hjem</Paragraph>
-        </a>
+        </Link>
       </footer>
     </>
   );

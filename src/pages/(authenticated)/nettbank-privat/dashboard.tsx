@@ -22,10 +22,12 @@ const b64sh = `data:image/svg+xml;base64,${btoa(sh)}`;
 
 import ring from "@sb1/ffe-icons/icons/open/400/xl/call.svg?raw";
 import person from "@sb1/ffe-icons/icons/open/400/xl/person.svg?raw";
+import { useNavigate } from "react-router-dom";
 const b64person = `data:image/svg+xml;base64,${btoa(person)}`;
 const b64ring = `data:image/svg+xml;base64,${btoa(ring)}`;
 // The dashboard should show the a list of the user's accounts including their balance, a list of the user's latest transactions and a button to transfer money.
 const DashBoard = () => {
+  const navigate = useNavigate();
   return (
     <div className="flex flex-col gap-4">
       <Heading1>Velkommen til Seniorbank 1, Olga!</Heading1>
@@ -39,7 +41,11 @@ const DashBoard = () => {
           {({ CardAction, Title }) => (
             <>
               <Title>
-                <CardAction href="#nettbank-privat/kontoer">
+                <CardAction
+                  onClick={() => {
+                    navigate("./kontoer");
+                  }}
+                >
                   Mine kontoer og saldo
                 </CardAction>
               </Title>
@@ -51,7 +57,13 @@ const DashBoard = () => {
           {({ CardAction, Title }) => (
             <>
               <Title>
-                <CardAction href="#nettbank-privat/kort">Mine kort</CardAction>
+                <CardAction
+                  onClick={() => {
+                    navigate("./kort");
+                  }}
+                >
+                  Mine kort
+                </CardAction>
               </Title>
             </>
           )}
@@ -61,7 +73,11 @@ const DashBoard = () => {
           {({ CardAction, Title }) => (
             <>
               <Title>
-                <CardAction href="#nettbank-privat/kontobevegelser">
+                <CardAction
+                  onClick={() => {
+                    navigate("./kontobevegelser");
+                  }}
+                >
                   Kontobevegelser
                 </CardAction>
               </Title>
@@ -76,7 +92,13 @@ const DashBoard = () => {
             {({ CardAction, Title }) => (
               <>
                 <Title>
-                  <CardAction href="#">Betal</CardAction>
+                  <CardAction
+                    onClick={() => {
+                      navigate("./betale");
+                    }}
+                  >
+                    Betal
+                  </CardAction>
                 </Title>
               </>
             )}
@@ -85,7 +107,11 @@ const DashBoard = () => {
             {({ CardAction, Title }) => (
               <>
                 <Title>
-                  <CardAction href="#nettbank-privat/overfore">
+                  <CardAction
+                    onClick={() => {
+                      navigate("./overfore");
+                    }}
+                  >
                     Overfør
                   </CardAction>
                 </Title>
