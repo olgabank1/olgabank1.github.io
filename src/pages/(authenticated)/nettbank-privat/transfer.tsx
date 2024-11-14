@@ -14,6 +14,8 @@ import { useState } from "react";
 import { accountBalanceKeys } from "../../../queries/account-balance";
 import { FieldErrors } from "../../../components/FieldErrors";
 
+const amountPattern = "^\\d+([.]\\d{2})?$";
+
 const TransferPage = () => {
   const actionData = useActionData() as FormattedErrors | null;
   const { data: me } = useSuspenseQuery(meQuery);
@@ -58,7 +60,7 @@ const TransferPage = () => {
           id="amount"
           name="amount"
           type="string"
-          pattern="\d+([.,]\d+)?"
+          pattern={amountPattern}
           required
         />
         <FieldErrors errors={actionData?.fieldErrors.amount} />
@@ -74,10 +76,7 @@ const TransferPage = () => {
 const TransferSchema = z.object({
   fromAccountId: z.string().regex(/^\d+$/).transform(Number),
   toAccountId: z.string().regex(/^\d+$/).transform(Number),
-  amount: z
-    .string()
-    .regex(/\d+([.,]\d+)?$/)
-    .transform(Number),
+  amount: z.string().regex(new RegExp(amountPattern)).transform(Number),
 });
 type FormattedErrors = z.inferFlattenedErrors<typeof TransferSchema>;
 const action =
