@@ -60,9 +60,9 @@ const TransferPage = () => {
         </select>
         <InputGroup label="Velg fra konto" extraMargin={false}>
           <AccountSelector
-            accounts={accounts.map((it) => ({
-              accountNumber: it.id.toString(),
-              name: it.name,
+            accounts={accounts.map(({ name, number }) => ({
+              accountNumber: number,
+              name: name,
             }))}
             id={""}
             onAccountSelected={doSomething}

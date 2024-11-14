@@ -4,6 +4,7 @@ import { accountsQuery } from "../queries/accounts";
 import { accountBalanceQuery } from "../queries/account-balance";
 import type { SelectAccount } from "../db/schema";
 import { transactionsByAccountQuery } from "../queries/transactions";
+import { formatAccountNumber, formatNumber } from "@sb1/ffe-formatters";
 
 type AccountProps = {
   account: SelectAccount;
@@ -16,10 +17,16 @@ const Account = ({ account }: AccountProps) => {
   const { data: transactions } = useSuspenseQuery(
     transactionsByAccountQuery(account)
   );
+  const formattedAccountNumber = formatAccountNumber(account.number);
+  const formattedBalance = formatNumber(accountBalance.balance, {
+    locale: "nb",
+    decimals: 2,
+  });
   return (
     <div className="flex flex-col gap-2 p-1 bg-fargeSand rounded-md border-fargeGraa border-2">
       <span className="capitalize">{account.name}</span>
-      <span>{accountBalance.balance}</span>
+      <span>{formattedAccountNumber}</span>
+      <span>{formattedBalance}</span>
       <span>{account.type}</span>
       <span>
         Det har vært {transactions?.length} transaksjoner på denne kontoen
