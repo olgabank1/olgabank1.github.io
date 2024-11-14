@@ -1,52 +1,31 @@
+import { IconCard } from "@sb1/ffe-cards-react";
+import { formatCurrency } from "@sb1/ffe-formatters";
+import { Icon } from "@sb1/ffe-icons-react";
 import { useSuspenseQuery } from "@tanstack/react-query";
-import { meQuery } from "../queries/me";
 import { accountsQuery } from "../queries/accounts";
-import { accountBalanceQuery } from "../queries/account-balance";
-import type { SelectAccount } from "../db/schema";
-import { transactionsByAccountQuery } from "../queries/transactions";
-import { formatAccountNumber, formatNumber } from "@sb1/ffe-formatters";
+import { meQuery } from "../queries/me";
 
-type AccountProps = {
-  account: SelectAccount;
-};
-
-const Account = ({ account }: AccountProps) => {
-  const { data: accountBalance } = useSuspenseQuery(
-    accountBalanceQuery(account)
-  );
-  const { data: transactions } = useSuspenseQuery(
-    transactionsByAccountQuery(account)
-  );
-  const formattedAccountNumber = formatAccountNumber(account.number);
-  const formattedBalance = formatNumber(accountBalance.balance, {
-    locale: "nb",
-    decimals: 2,
-  });
-  return (
-    <div className="flex flex-col gap-2 p-1 bg-fargeSand rounded-md border-fargeGraa border-2">
-      <span className="capitalize">{account.name}</span>
-      <span>{formattedAccountNumber}</span>
-      <span>{formattedBalance}</span>
-      <span>{account.type}</span>
-      <span>
-        Det har vært {transactions?.length} transaksjoner på denne kontoen
-      </span>
-    </div>
-  );
-};
+import sh from "@sb1/ffe-icons/icons/open/400/xl/account_balance.svg?raw";
+const b64sh = `data:image/svg+xml;base64,${btoa(sh)}`;
 
 const AccountsCard = () => {
   const { data: me } = useSuspenseQuery(meQuery);
   const { data: accounts } = useSuspenseQuery(accountsQuery(me!));
   return (
-    <div className="flex flex-col shadow-olga rounded">
-      <div className="flex flex-col gap-2 p-4 bg-white ">
-        <h2 className="text-2xl">Dine kontoer</h2>
-        {accounts?.map((account) => (
-          <Account key={account.id} account={account} />
-        ))}
-      </div>
-    </div>
+    <>
+      {accounts?.map((account) => (
+        // <Account key={account.id} account={account} />
+        <IconCard icon={<Icon fileUrl={b64sh} size="xl" />}>
+          {({ Title, Subtext, Text }) => (
+            <>
+              <Title>{account.name}</Title>
+              <Subtext>{account.number}</Subtext>
+              <Text>{formatCurrency(account.balance, { locale: "nb" })}</Text>
+            </>
+          )}
+        </IconCard>
+      ))}
+    </>
   );
 };
 
