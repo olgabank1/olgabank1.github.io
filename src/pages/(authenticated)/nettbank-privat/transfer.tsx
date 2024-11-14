@@ -1,4 +1,7 @@
+import { AccountSelector } from "@sb1/ffe-account-selector-react";
+import { InputGroup } from "@sb1/ffe-form-react";
 import { useSuspenseQuery, type QueryClient } from "@tanstack/react-query";
+import { useState } from "react";
 import {
   Form,
   redirect,
@@ -6,13 +9,12 @@ import {
   useNavigation,
   type ActionFunction,
 } from "react-router-dom";
-import { meQuery } from "../../../queries/me";
-import { accountsQuery } from "../../../queries/accounts";
 import { z } from "zod";
-import { transfer } from "../../../repository/account";
-import { useState } from "react";
-import { accountBalanceKeys } from "../../../queries/account-balance";
 import { FieldErrors } from "../../../components/FieldErrors";
+import { accountBalanceKeys } from "../../../queries/account-balance";
+import { accountsQuery } from "../../../queries/accounts";
+import { meQuery } from "../../../queries/me";
+import { transfer } from "../../../repository/account";
 
 const TransferPage = () => {
   const actionData = useActionData() as FormattedErrors | null;
@@ -26,6 +28,7 @@ const TransferPage = () => {
     return <div>Du har ingen kontoer</div>;
   }
   const isBusy = state !== "idle";
+  const doSomething = () => {};
   return (
     <div>
       <Form method="post">
@@ -53,6 +56,17 @@ const TransferPage = () => {
               </option>
             ))}
         </select>
+        <InputGroup label="Velg fra konto" extraMargin={false}>
+          <AccountSelector
+            accounts={accounts.map((it) => ({
+              accountNumber: it.id.toString(),
+              name: it.name,
+            }))}
+            id={""}
+            onAccountSelected={doSomething}
+            onReset={doSomething}
+          />
+        </InputGroup>
         <label htmlFor="amount">Beløp:</label>
         <input
           id="amount"
