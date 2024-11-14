@@ -160,13 +160,6 @@ const configForAccountType = (type: AccountType) => {
           { weight: 0.6, value: "renteinntekt" },
         ],
       };
-    case "BSU":
-      return {
-        recencyInDays: 365,
-        transactionsAmount: { min: 25_000, max: 25_000 },
-        numTransactions: { min: 1, max: 1 },
-        weightedDescriptions: [{ weight: 10, value: "innskudd" }],
-      };
     default:
       return {
         recencyInDays: 0,
