@@ -157,6 +157,7 @@ const TransferPage = () => {
           </ErrorFieldMessage>
         )}
         <ActionButton
+          className="mt-2"
           type="submit"
           disabled={isBusy}
           isLoading={isBusy}
