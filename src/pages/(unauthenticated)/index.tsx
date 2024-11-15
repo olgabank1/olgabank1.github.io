@@ -3,7 +3,7 @@ import { Heading2, Heading3, Paragraph, Wave } from "@sb1/ffe-core-react";
 export function Index() {
   return (
     <>
-      <div className=" -mx-2 py-2 bg-fargeVann30">
+      <div className="-mx-2 py-2 bg-fargeVann30">
         <Heading2 className="mx-4 my-2">
           Norges beste mobilbank - Også for seniorer!
         </Heading2>
