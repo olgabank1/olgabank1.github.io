@@ -23,14 +23,17 @@ const b64sh = `data:image/svg+xml;base64,${btoa(sh)}`;
 import ring from "@sb1/ffe-icons/icons/open/400/xl/call.svg?raw";
 import person from "@sb1/ffe-icons/icons/open/400/xl/person.svg?raw";
 import { useNavigate } from "react-router-dom";
+import { useSuspenseQuery } from "@tanstack/react-query";
+import { meQuery } from "../../../queries/me";
 const b64person = `data:image/svg+xml;base64,${btoa(person)}`;
 const b64ring = `data:image/svg+xml;base64,${btoa(ring)}`;
 // The dashboard should show the a list of the user's accounts including their balance, a list of the user's latest transactions and a button to transfer money.
 const DashBoard = () => {
   const navigate = useNavigate();
+  const { data: me } = useSuspenseQuery(meQuery);
   return (
     <div className="flex flex-col gap-4">
-      <Heading1>Velkommen til Seniorbank 1, Olga!</Heading1>
+      <Heading1>Velkommen til Seniorbank 1, {me!.name.split(" ")[0]}!</Heading1>
 
       <DividerLine className="" />
 
